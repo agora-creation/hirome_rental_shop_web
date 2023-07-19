@@ -37,6 +37,19 @@ class _HistoryScreenState extends State<HistoryScreen> {
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: kGreenColor,
+              ),
+              onPressed: () {},
+              child: const Text(
+                'ダウンロード',
+                style: TextStyle(color: kWhiteColor),
+              ),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.close, color: kBlackColor),
             onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
