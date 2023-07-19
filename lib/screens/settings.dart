@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hirome_rental_shop_web/common/functions.dart';
 import 'package:hirome_rental_shop_web/common/style.dart';
 import 'package:hirome_rental_shop_web/providers/auth.dart';
+import 'package:hirome_rental_shop_web/screens/favorites.dart';
 import 'package:hirome_rental_shop_web/screens/login.dart';
+import 'package:hirome_rental_shop_web/screens/password.dart';
 import 'package:hirome_rental_shop_web/widgets/link_text.dart';
 import 'package:hirome_rental_shop_web/widgets/setting_list_tile.dart';
 import 'package:provider/provider.dart';
@@ -44,12 +46,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
               iconData: Icons.key,
               label: 'パスワード変更',
               topBorder: true,
-              onTap: () {},
+              onTap: () => pushScreen(
+                context,
+                PasswordScreen(authProvider: authProvider),
+              ),
             ),
             SettingListTile(
               iconData: Icons.favorite,
               label: '注文商品設定',
-              onTap: () {},
+              onTap: () => pushScreen(
+                context,
+                FavoritesScreen(authProvider: authProvider),
+              ),
             ),
             const SizedBox(height: 32),
             Center(
