@@ -14,7 +14,6 @@ class ShopService {
     await firestore
         .collection(collection)
         .where('number', isEqualTo: number ?? 'error')
-        .where('password', isEqualTo: password ?? 'error')
         .where('authority', isEqualTo: 0)
         .get()
         .then((value) {

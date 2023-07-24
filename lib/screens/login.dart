@@ -47,16 +47,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: kBlackColor,
                             prefix: Icons.food_bank,
                           ),
-                          const SizedBox(height: 8),
-                          CustomTextFormField(
-                            controller: authProvider.password,
-                            obscureText: true,
-                            textInputType: TextInputType.visiblePassword,
-                            maxLines: 1,
-                            label: 'パスワード',
-                            color: kBlackColor,
-                            prefix: Icons.key,
-                          ),
                           const SizedBox(height: 16),
                           CustomLgButton(
                             label: 'ログイン',
