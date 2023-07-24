@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   '注文履歴',
                                   style: TextStyle(
                                     color: kWhiteColor,
-                                    fontSize: 18,
+                                    fontSize: 16,
                                   ),
                                 ),
                               ),
