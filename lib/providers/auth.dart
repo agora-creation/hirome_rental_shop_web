@@ -55,9 +55,9 @@ class AuthProvider with ChangeNotifier {
         );
         if (tmpShop != null) {
           _shop = tmpShop;
-          final deviceInfoPlugin = DeviceInfoPlugin();
-          final deviceInfo = await deviceInfoPlugin.webBrowserInfo;
-          String deviceName = deviceInfo.browserName.name;
+          DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+          final webInfo = await deviceInfo.webBrowserInfo;
+          String deviceName = webInfo.browserName.name;
           shopLoginService.create({
             'id': value.user?.uid,
             'shopNumber': tmpShop.number,
