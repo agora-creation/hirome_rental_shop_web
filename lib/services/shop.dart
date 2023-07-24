@@ -9,7 +9,7 @@ class ShopService {
     firestore.collection(collection).doc(values['id']).update(values);
   }
 
-  Future<ShopModel?> select({String? number, String? password}) async {
+  Future<ShopModel?> select({String? number}) async {
     ShopModel? ret;
     await firestore
         .collection(collection)
