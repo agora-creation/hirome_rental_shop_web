@@ -12,6 +12,7 @@ import 'package:hirome_rental_shop_web/screens/order_cart.dart';
 import 'package:hirome_rental_shop_web/screens/settings.dart';
 import 'package:hirome_rental_shop_web/services/product.dart';
 import 'package:hirome_rental_shop_web/services/shop_login.dart';
+import 'package:hirome_rental_shop_web/widgets/animation_background.dart';
 import 'package:hirome_rental_shop_web/widgets/cart_next_button.dart';
 import 'package:hirome_rental_shop_web/widgets/custom_image.dart';
 import 'package:hirome_rental_shop_web/widgets/custom_lg_button.dart';
@@ -45,125 +46,164 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         if (shopLogin == null || shopLogin.accept == false) {
           return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const LoginTitle(),
-                    const Column(
+            body: Stack(
+              children: [
+                const AnimationBackground(),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          '管理者へログイン申請を送信しました。\n承認まで今しばらくお待ちくださいませ。',
-                          style: TextStyle(
-                            color: kWhiteColor,
-                            fontSize: 16,
-                          ),
+                        const LoginTitle(),
+                        const Column(
+                          children: [
+                            Text(
+                              '管理者へログイン申請を送信しました。\n承認まで今しばらくお待ちくださいませ。',
+                              style: TextStyle(
+                                color: kWhiteColor,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                        LinkText(
+                          label: 'ログインへ戻る',
+                          labelColor: kWhiteColor,
+                          onTap: () async {
+                            await authProvider.signOut();
+                            authProvider.clearController();
+                            if (!mounted) return;
+                            pushReplacementScreen(context, const LoginScreen());
+                          },
                         ),
                       ],
                     ),
-                    LinkText(
-                      label: 'ログインへ戻る',
-                      labelColor: kWhiteColor,
-                      onTap: () async {
-                        await authProvider.signOut();
-                        authProvider.clearController();
-                        if (!mounted) return;
-                        pushReplacementScreen(context, const LoginScreen());
-                      },
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           );
         }
         return Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text('${authProvider.shop?.name} : 注文'),
-            actions: [
-              TextButton(
-                child: const Text(
-                  '注文履歴',
-                  style: TextStyle(color: kWhiteColor),
-                ),
-                onPressed: () => showBottomUpScreen(
-                  context,
-                  const HistoryScreen(),
-                ),
-              ),
-              IconButton(
-                onPressed: () => showBottomUpScreen(
-                  context,
-                  const SettingsScreen(),
-                ),
-                icon: const Icon(Icons.settings),
-              ),
-            ],
-          ),
-          body: Column(
+          body: Stack(
             children: [
-              const Text(
-                '注文したい商品をタップしてください',
-                style: TextStyle(
-                  color: kWhiteColor,
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Expanded(
-                child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                  stream: productService.streamList(),
-                  builder: (context, snapshot) {
-                    List<ProductModel> products = [];
-                    List<String> favorites = authProvider.shop?.favorites ?? [];
-                    if (snapshot.hasData) {
-                      for (DocumentSnapshot<Map<String, dynamic>> doc
-                          in snapshot.data!.docs) {
-                        ProductModel product = ProductModel.fromSnapshot(doc);
-                        var contain =
-                            favorites.where((e) => e == product.number);
-                        if (contain.isNotEmpty) {
-                          products.add(product);
-                        }
-                      }
-                    }
-                    if (products.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          '注文できる商品がありません\n注文商品設定をご確認ください',
-                          style: TextStyle(
-                            color: kWhiteColor,
-                            fontSize: 16,
-                          ),
-                        ),
-                      );
-                    }
-                    return GridView.builder(
-                      gridDelegate: kProductGrid,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      itemCount: products.length,
-                      itemBuilder: (context, index) {
-                        ProductModel product = products[index];
-                        return ProductCard(
-                          product: product,
-                          carts: authProvider.carts,
-                          onTap: () => showDialog(
-                            context: context,
-                            builder: (context) => ProductDetailsDialog(
-                              authProvider: authProvider,
-                              product: product,
+              const AnimationBackground(),
+              SafeArea(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 16,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${authProvider.shop?.name} : 注文',
+                            style: const TextStyle(
+                              color: kWhiteColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ).then((value) {
-                            authProvider.initCarts();
-                          }),
-                        );
-                      },
-                    );
-                  },
+                          ),
+                          Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () => showBottomUpScreen(
+                                  context,
+                                  const HistoryScreen(),
+                                ),
+                                child: const Text(
+                                  '注文履歴',
+                                  style: TextStyle(
+                                    color: kWhiteColor,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              GestureDetector(
+                                onTap: () => showBottomUpScreen(
+                                  context,
+                                  const SettingsScreen(),
+                                ),
+                                child: const Icon(
+                                  Icons.settings,
+                                  color: kWhiteColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      '注文したい商品をタップしてください',
+                      style: TextStyle(
+                        color: kWhiteColor,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                        stream: productService.streamList(),
+                        builder: (context, snapshot) {
+                          List<ProductModel> products = [];
+                          List<String> favorites =
+                              authProvider.shop?.favorites ?? [];
+                          if (snapshot.hasData) {
+                            for (DocumentSnapshot<Map<String, dynamic>> doc
+                                in snapshot.data!.docs) {
+                              ProductModel product =
+                                  ProductModel.fromSnapshot(doc);
+                              var contain =
+                                  favorites.where((e) => e == product.number);
+                              if (contain.isNotEmpty) {
+                                products.add(product);
+                              }
+                            }
+                          }
+                          if (products.isEmpty) {
+                            return const Center(
+                              child: Text(
+                                '注文できる商品がありません\n注文商品設定をご確認ください',
+                                style: TextStyle(
+                                  color: kWhiteColor,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            );
+                          }
+                          return GridView.builder(
+                            gridDelegate: kProductGrid,
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            itemCount: products.length,
+                            itemBuilder: (context, index) {
+                              ProductModel product = products[index];
+                              return ProductCard(
+                                product: product,
+                                carts: authProvider.carts,
+                                onTap: () => showDialog(
+                                  context: context,
+                                  builder: (context) => ProductDetailsDialog(
+                                    authProvider: authProvider,
+                                    product: product,
+                                  ),
+                                ).then((value) {
+                                  authProvider.initCarts();
+                                }),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
