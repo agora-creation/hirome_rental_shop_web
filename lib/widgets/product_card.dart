@@ -46,7 +46,7 @@ class ProductCard extends StatelessWidget {
                               '商品番号 : ${product.number}',
                               style: const TextStyle(
                                 color: kGreyColor,
-                                fontSize: 12,
+                                fontSize: 14,
                               ),
                             ),
                             Text(
@@ -81,7 +81,7 @@ class ProductCard extends StatelessWidget {
                           '${contain.first.requestQuantity}${contain.first.unit}',
                           style: const TextStyle(
                             color: kWhiteColor,
-                            fontSize: 24,
+                            fontSize: 32,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -89,7 +89,7 @@ class ProductCard extends StatelessWidget {
                           '選択中',
                           style: TextStyle(
                             color: kWhiteColor,
-                            fontSize: 16,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

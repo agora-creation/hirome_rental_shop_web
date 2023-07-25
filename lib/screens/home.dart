@@ -14,6 +14,7 @@ import 'package:hirome_rental_shop_web/services/product.dart';
 import 'package:hirome_rental_shop_web/services/shop_login.dart';
 import 'package:hirome_rental_shop_web/widgets/animation_background.dart';
 import 'package:hirome_rental_shop_web/widgets/cart_next_button.dart';
+import 'package:hirome_rental_shop_web/widgets/custom_header.dart';
 import 'package:hirome_rental_shop_web/widgets/custom_image.dart';
 import 'package:hirome_rental_shop_web/widgets/custom_lg_button.dart';
 import 'package:hirome_rental_shop_web/widgets/link_text.dart';
@@ -92,52 +93,37 @@ class _HomeScreenState extends State<HomeScreen> {
               SafeArea(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 16,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            '${authProvider.shop?.name} : 注文',
-                            style: const TextStyle(
+                    CustomHeader(
+                      title: '${authProvider.shop?.name} : 注文',
+                      actions: [
+                        GestureDetector(
+                          onTap: () => showBottomUpScreen(
+                            context,
+                            const HistoryScreen(),
+                          ),
+                          child: const Text(
+                            '注文履歴',
+                            style: TextStyle(
                               color: kWhiteColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                             ),
                           ),
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () => showBottomUpScreen(
-                                  context,
-                                  const HistoryScreen(),
-                                ),
-                                child: const Text(
-                                  '注文履歴',
-                                  style: TextStyle(
-                                    color: kWhiteColor,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              GestureDetector(
-                                onTap: () => showBottomUpScreen(
-                                  context,
-                                  const SettingsScreen(),
-                                ),
-                                child: const Icon(
-                                  Icons.settings,
-                                  color: kWhiteColor,
-                                ),
-                              ),
-                            ],
+                        ),
+                        const SizedBox(width: 24),
+                        GestureDetector(
+                          onTap: () => showBottomUpScreen(
+                            context,
+                            const SettingsScreen(),
                           ),
-                        ],
-                      ),
+                          child: const Text(
+                            '設定',
+                            style: TextStyle(
+                              color: kWhiteColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     const Text(
@@ -275,7 +261,7 @@ class _ProductDetailsDialogState extends State<ProductDetailsDialog> {
             '商品番号 : ${widget.product.number}',
             style: const TextStyle(
               color: kGreyColor,
-              fontSize: 12,
+              fontSize: 14,
             ),
           ),
           Text(
