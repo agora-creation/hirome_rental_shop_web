@@ -176,7 +176,7 @@ class _CsvDialogState extends State<CsvDialog> {
             onPressed: () async {
               await widget.orderProvider.csvDownload(
                 selectedMonth,
-                widget.shop.name,
+                widget.shop.number,
               );
             },
           ),

@@ -104,7 +104,7 @@ class OrderProvider with ChangeNotifier {
     return error;
   }
 
-  Future csvDownload(DateTime month, String shopName) async {
+  Future csvDownload(DateTime month, String shopNumber) async {
     final fileName = '${dateText('yyyyMMddHHmmss', DateTime.now())}.csv';
     List<String> header = [
       '注文日時',
@@ -125,7 +125,7 @@ class OrderProvider with ChangeNotifier {
       const Duration(days: -1),
     );
     List<OrderModel> orders = await orderService.selectList(
-      shopName: shopName,
+      shopNumber: shopNumber,
       searchStart: monthStart,
       searchEnd: monthEnd,
     );

@@ -34,7 +34,7 @@ class OrderService {
   }
 
   Future<List<OrderModel>> selectList({
-    String? shopName,
+    String? shopNumber,
     required DateTime searchStart,
     required DateTime searchEnd,
   }) async {
@@ -43,7 +43,7 @@ class OrderService {
     Timestamp endAt = convertTimestamp(searchEnd, true);
     await firestore
         .collection(collection)
-        .where('shopName', isEqualTo: shopName)
+        .where('shopNumber', isEqualTo: shopNumber)
         .orderBy('createdAt', descending: true)
         .startAt([endAt])
         .endAt([startAt])
