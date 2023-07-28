@@ -29,14 +29,14 @@ class CartList extends StatelessWidget {
                 '商品番号 : ${cart.number}',
                 style: const TextStyle(
                   color: kGreyColor,
-                  fontSize: 12,
+                  fontSize: 14,
                 ),
               ),
               Text(
                 cart.name,
                 style: const TextStyle(
                   color: kBlackColor,
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -51,14 +51,14 @@ class CartList extends StatelessWidget {
                     '希望数量',
                     style: TextStyle(
                       color: kGreyColor,
-                      fontSize: 12,
+                      fontSize: 14,
                     ),
                   ),
                   Text(
                     '${cart.requestQuantity}${cart.unit}',
                     style: const TextStyle(
                       color: kBlackColor,
-                      fontSize: 16,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -73,14 +73,14 @@ class CartList extends StatelessWidget {
                           '納品数量',
                           style: TextStyle(
                             color: kGreyColor,
-                            fontSize: 12,
+                            fontSize: 14,
                           ),
                         ),
                         Text(
                           '${cart.deliveryQuantity}${cart.unit}',
                           style: const TextStyle(
                             color: kBlackColor,
-                            fontSize: 16,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:hirome_rental_shop_web/common/functions.dart';
 import 'package:hirome_rental_shop_web/common/style.dart';
 import 'package:hirome_rental_shop_web/models/order.dart';
+import 'package:hirome_rental_shop_web/models/shop.dart';
 import 'package:hirome_rental_shop_web/providers/auth.dart';
 import 'package:hirome_rental_shop_web/providers/order.dart';
 import 'package:hirome_rental_shop_web/services/order.dart';
 import 'package:hirome_rental_shop_web/widgets/cart_list.dart';
 import 'package:hirome_rental_shop_web/widgets/custom_sm_button.dart';
 import 'package:hirome_rental_shop_web/widgets/date_range_field.dart';
+import 'package:hirome_rental_shop_web/widgets/header_button.dart';
 import 'package:hirome_rental_shop_web/widgets/history_list_tile.dart';
+import 'package:hirome_rental_shop_web/widgets/month_field.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:provider/provider.dart';
 
 class HistoryScreen extends StatefulWidget {
@@ -37,16 +41,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: kGreenColor,
-              ),
-              onPressed: () {},
-              child: const Text(
-                'ダウンロード',
-                style: TextStyle(color: kWhiteColor),
+          HeaderButton(
+            label: 'CSVダウンロード',
+            labelColor: kWhiteColor,
+            backgroundColor: kGreenColor,
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => CsvDialog(
+                orderProvider: orderProvider,
+                shop: authProvider.shop!,
               ),
             ),
           ),
@@ -119,6 +122,65 @@ class _HistoryScreenState extends State<HistoryScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CsvDialog extends StatefulWidget {
+  final OrderProvider orderProvider;
+  final ShopModel shop;
+
+  const CsvDialog({
+    required this.orderProvider,
+    required this.shop,
+    super.key,
+  });
+
+  @override
+  State<CsvDialog> createState() => _CsvDialogState();
+}
+
+class _CsvDialogState extends State<CsvDialog> {
+  DateTime selectedMonth = DateTime.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      contentPadding: const EdgeInsets.all(16),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('CSVファイルをダウンロードします。対象の年月を選択してください。'),
+          const SizedBox(height: 8),
+          MonthField(
+            value: selectedMonth,
+            onTap: () async {
+              var selected = await showMonthPicker(
+                context: context,
+                initialDate: selectedMonth,
+              );
+              if (selected != null) {
+                setState(() {
+                  selectedMonth = selected;
+                });
+              }
+            },
+          ),
+          const SizedBox(height: 16),
+          CustomSmButton(
+            label: 'ダウンロード',
+            labelColor: kWhiteColor,
+            backgroundColor: kGreenColor,
+            onPressed: () async {
+              await widget.orderProvider.csvDownload(
+                selectedMonth,
+                widget.shop.name,
+              );
+            },
+          ),
+        ],
       ),
     );
   }

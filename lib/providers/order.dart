@@ -1,3 +1,6 @@
+import 'dart:html';
+
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:hirome_rental_shop_web/common/functions.dart';
 import 'package:hirome_rental_shop_web/models/cart.dart';
@@ -99,5 +102,62 @@ class OrderProvider with ChangeNotifier {
       error = 'キャンセルに失敗しました';
     }
     return error;
+  }
+
+  Future csvDownload(DateTime month, String shopName) async {
+    final fileName = '${dateText('yyyyMMddHHmmss', DateTime.now())}.csv';
+    List<String> header = [
+      '注文日時',
+      '注文番号',
+      '発注元店舗番号',
+      '発注元店舗名',
+      '商品番号',
+      '商品名',
+      '単価',
+      '単位',
+      '希望数量',
+      '納品数量',
+      '合計金額',
+      'ステータス',
+    ];
+    DateTime monthStart = DateTime(month.year, month.month, 1);
+    DateTime monthEnd = DateTime(month.year, month.month + 1, 1).add(
+      const Duration(days: -1),
+    );
+    List<OrderModel> orders = await orderService.selectList(
+      shopName: shopName,
+      searchStart: monthStart,
+      searchEnd: monthEnd,
+    );
+    List<List<String>> rows = [];
+    for (OrderModel order in orders) {
+      for (CartModel cart in order.carts) {
+        List<String> row = [];
+        row.add(dateText('yyyy/MM/dd HH:mm', order.createdAt));
+        row.add(order.number);
+        row.add(order.shopNumber);
+        row.add(order.shopName);
+        row.add(cart.number);
+        row.add(cart.name);
+        row.add('${cart.price}');
+        row.add(cart.unit);
+        row.add('${cart.requestQuantity}');
+        row.add('${cart.deliveryQuantity}');
+        int totalPrice = cart.price * cart.deliveryQuantity;
+        row.add('$totalPrice');
+        row.add(order.statusText());
+        rows.add(row);
+      }
+    }
+    String csv = const ListToCsvConverter().convert(
+      [header, ...rows],
+    );
+    String bom = '\uFEFF';
+    String csvText = bom + csv;
+    csvText = csvText.replaceAll('[', '');
+    csvText = csvText.replaceAll(']', '');
+    AnchorElement(href: 'data:text/plain;charset=utf-8,$csvText')
+      ..setAttribute('download', fileName)
+      ..click();
   }
 }
