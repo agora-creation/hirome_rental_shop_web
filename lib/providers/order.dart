@@ -4,11 +4,16 @@ import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:hirome_rental_shop_web/common/functions.dart';
 import 'package:hirome_rental_shop_web/models/cart.dart';
+import 'package:hirome_rental_shop_web/models/center.dart';
 import 'package:hirome_rental_shop_web/models/order.dart';
 import 'package:hirome_rental_shop_web/models/shop.dart';
+import 'package:hirome_rental_shop_web/services/center.dart';
+import 'package:hirome_rental_shop_web/services/messaging.dart';
 import 'package:hirome_rental_shop_web/services/order.dart';
 
 class OrderProvider with ChangeNotifier {
+  CenterService centerService = CenterService();
+  MessagingService messagingService = MessagingService();
   OrderService orderService = OrderService();
 
   DateTime searchStart = DateTime(
@@ -56,6 +61,10 @@ class OrderProvider with ChangeNotifier {
         'updatedAt': DateTime.now(),
         'createdAt': DateTime.now(),
       });
+      List<CenterModel> centers = await centerService.selectList();
+      for (CenterModel center in centers) {
+        messagingService.fcmSend(center.token);
+      }
     } catch (e) {
       error = '注文に失敗しました';
     }
@@ -84,6 +93,10 @@ class OrderProvider with ChangeNotifier {
         'updatedAt': DateTime.now(),
         'createdAt': DateTime.now(),
       });
+      List<CenterModel> centers = await centerService.selectList();
+      for (CenterModel center in centers) {
+        messagingService.fcmSend(center.token);
+      }
     } catch (e) {
       error = '再注文に失敗しました';
     }
