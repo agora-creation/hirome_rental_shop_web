@@ -31,9 +31,11 @@ class AuthProvider with ChangeNotifier {
   List<CartModel> get carts => _carts;
 
   TextEditingController number = TextEditingController();
+  TextEditingController requestName = TextEditingController();
 
   void clearController() {
     number.clear();
+    requestName.clear();
   }
 
   AuthProvider.initialize() : auth = FirebaseAuth.instance {
@@ -57,6 +59,7 @@ class AuthProvider with ChangeNotifier {
             'id': value.user?.uid,
             'shopNumber': tmpShop.number,
             'shopName': tmpShop.name,
+            'requestName': requestName.text,
             'deviceName': deviceName,
             'accept': false,
             'createdAt': DateTime.now(),

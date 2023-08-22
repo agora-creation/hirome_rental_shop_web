@@ -47,6 +47,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: kBlackColor,
                             prefix: Icons.food_bank,
                           ),
+                          const SizedBox(height: 8),
+                          CustomTextFormField(
+                            controller: authProvider.requestName,
+                            textInputType: TextInputType.name,
+                            maxLines: 1,
+                            label: '申請者名',
+                            color: kBlackColor,
+                            prefix: Icons.person,
+                          ),
                           const SizedBox(height: 16),
                           CustomLgButton(
                             label: 'ログイン',
@@ -63,7 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (!mounted) return;
                               showMessage(context, 'ログイン申請を送信しました', true);
                               pushReplacementScreen(
-                                  context, const HomeScreen());
+                                context,
+                                const HomeScreen(),
+                              );
                             },
                           ),
                         ],
