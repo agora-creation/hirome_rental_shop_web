@@ -45,7 +45,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           icon: const Icon(
             Icons.chevron_left,
             color: kBlackColor,
-            size: 32.0,
           ),
           onPressed: () => Navigator.pop(context),
         ),
