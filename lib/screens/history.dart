@@ -167,6 +167,8 @@ class _CsvDialogState extends State<CsvDialog> {
               var selected = await showMonthPicker(
                 context: context,
                 initialDate: selectedMonth,
+                firstDate: kFirstDate,
+                lastDate: kLastDate,
               );
               if (selected != null) {
                 setState(() {
