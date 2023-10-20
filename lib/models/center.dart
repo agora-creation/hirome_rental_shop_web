@@ -13,6 +13,8 @@ class CenterModel {
     Map<String, dynamic> map = snapshot.data() ?? {};
     _id = map['id'] ?? '';
     _token = map['token'] ?? '';
-    _createdAt = map['createdAt'].toDate() ?? DateTime.now();
+    if (map['createdAt'] != null) {
+      _createdAt = map['createdAt'].toDate() ?? DateTime.now();
+    }
   }
 }

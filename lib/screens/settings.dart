@@ -53,9 +53,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 32),
             Center(
               child: LinkText(
-                label: 'ログアウト',
+                label: '初期化する(店舗ログイン申請から始める)',
                 labelColor: kRedColor,
                 onTap: () async {
+                  await authProvider.deleteShopLogin();
                   await authProvider.signOut();
                   authProvider.clearController();
                   if (!mounted) return;

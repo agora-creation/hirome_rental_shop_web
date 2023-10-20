@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (snapshot.hasData) {
           shopLogin = ShopLoginModel.fromSnapshot(snapshot.requireData);
         }
-        if (shopLogin == null || shopLogin.accept == false) {
+        if (shopLogin == null || shopLogin.id == '') {
           return Scaffold(
             body: Stack(
               children: [
@@ -58,22 +58,57 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         const LoginTitle(),
-                        const Column(
-                          children: [
-                            Text(
-                              '管理者へログイン申請を送信しました。\n承認まで今しばらくお待ちくださいませ。',
-                              style: TextStyle(
-                                color: kWhiteColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                        const Text(
+                          '管理者からログインをブロックされました。\nログイン申請から始めてください。',
+                          style: TextStyle(
+                            color: kWhiteColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         LinkText(
-                          label: 'ログインへ戻る',
+                          label: 'ログイン申請から始める',
                           labelColor: kWhiteColor,
                           onTap: () async {
+                            await authProvider.signOut();
+                            authProvider.clearController();
+                            if (!mounted) return;
+                            pushReplacementScreen(context, const LoginScreen());
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+        if (shopLogin.accept == false) {
+          return Scaffold(
+            body: Stack(
+              children: [
+                const AnimationBackground(),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const LoginTitle(),
+                        const Text(
+                          '管理者へログイン申請を送信しました。\n承認まで今しばらくお待ちくださいませ。',
+                          style: TextStyle(
+                            color: kWhiteColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        LinkText(
+                          label: 'ログイン申請をキャンセルする',
+                          labelColor: kWhiteColor,
+                          onTap: () async {
+                            await authProvider.deleteShopLogin();
                             await authProvider.signOut();
                             authProvider.clearController();
                             if (!mounted) return;

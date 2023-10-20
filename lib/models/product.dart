@@ -40,7 +40,9 @@ class ProductModel {
     _category = map['category'] ?? 0;
     _priority = map['priority'] ?? 0;
     _display = map['display'] ?? false;
-    _createdAt = map['createdAt'].toDate() ?? DateTime.now();
+    if (map['createdAt'] != null) {
+      _createdAt = map['createdAt'].toDate() ?? DateTime.now();
+    }
   }
 
   String categoryText() {

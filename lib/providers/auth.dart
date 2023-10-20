@@ -62,6 +62,7 @@ class AuthProvider with ChangeNotifier {
             'requestName': requestName.text,
             'deviceName': deviceName,
             'accept': false,
+            'acceptedAt': DateTime.now(),
             'createdAt': DateTime.now(),
           });
           await setPrefsString('shopNumber', tmpShop.number);
@@ -89,6 +90,10 @@ class AuthProvider with ChangeNotifier {
       error = 'お気に入り設定に失敗しました';
     }
     return error;
+  }
+
+  Future deleteShopLogin() async {
+    shopLoginService.delete({'id': _authUser?.uid});
   }
 
   Future signOut() async {

@@ -8,6 +8,10 @@ class ShopLoginService {
     firestore.collection(collection).doc(values['id']).set(values);
   }
 
+  void delete(Map<String, dynamic> values) {
+    firestore.collection(collection).doc(values['id']).delete();
+  }
+
   Stream<DocumentSnapshot<Map<String, dynamic>>> streamList(String? id) {
     return FirebaseFirestore.instance
         .collection(collection)
