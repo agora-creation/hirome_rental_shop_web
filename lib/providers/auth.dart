@@ -44,12 +44,16 @@ class AuthProvider with ChangeNotifier {
 
   Future<String?> signIn() async {
     String? error;
+    String numberText = number.text.trim();
+    String requestNameText = requestName.text.trim();
+    if (numberText == '') return '店舗番号をご入力ください';
+    if (requestNameText == '') return 'あなたの名前をご入力ください';
     try {
       _status = AuthStatus.authenticating;
       notifyListeners();
       await auth?.signInAnonymously().then((value) async {
         _authUser = value.user;
-        ShopModel? tmpShop = await shopService.select(number: number.text);
+        ShopModel? tmpShop = await shopService.select(number: numberText);
         if (tmpShop != null) {
           _shop = tmpShop;
           DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
@@ -59,7 +63,7 @@ class AuthProvider with ChangeNotifier {
             'id': value.user?.uid,
             'shopNumber': tmpShop.number,
             'shopName': tmpShop.name,
-            'requestName': requestName.text,
+            'requestName': requestNameText,
             'deviceName': deviceName,
             'accept': false,
             'acceptedAt': DateTime.now(),
