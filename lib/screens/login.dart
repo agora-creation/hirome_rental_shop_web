@@ -17,6 +17,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool buttonDisabled = false;
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -65,26 +67,39 @@ class _LoginScreenState extends State<LoginScreen> {
                             prefix: Icons.person,
                           ),
                           const SizedBox(height: 16),
-                          CustomLgButton(
-                            label: 'ログイン',
-                            labelColor: kWhiteColor,
-                            backgroundColor: kBlueColor,
-                            onPressed: () async {
-                              String? error = await authProvider.signIn();
-                              if (error != null) {
-                                if (!mounted) return;
-                                showMessage(context, error, false);
-                                return;
-                              }
-                              authProvider.clearController();
-                              if (!mounted) return;
-                              showMessage(context, 'ログイン申請を送信しました', true);
-                              pushReplacementScreen(
-                                context,
-                                const HomeScreen(),
-                              );
-                            },
-                          ),
+                          buttonDisabled
+                              ? const CustomLgButton(
+                                  label: 'ログイン',
+                                  labelColor: kWhiteColor,
+                                  backgroundColor: kGreyColor,
+                                  onPressed: null,
+                                )
+                              : CustomLgButton(
+                                  label: 'ログイン',
+                                  labelColor: kWhiteColor,
+                                  backgroundColor: kBlueColor,
+                                  onPressed: () async {
+                                    setState(() {
+                                      buttonDisabled = true;
+                                    });
+                                    String? error = await authProvider.signIn();
+                                    if (error != null) {
+                                      if (!mounted) return;
+                                      showMessage(context, error, false);
+                                      setState(() {
+                                        buttonDisabled = false;
+                                      });
+                                      return;
+                                    }
+                                    authProvider.clearController();
+                                    if (!mounted) return;
+                                    showMessage(context, 'ログイン申請を送信しました', true);
+                                    pushReplacementScreen(
+                                      context,
+                                      const HomeScreen(),
+                                    );
+                                  },
+                                ),
                         ],
                       ),
                     ),
