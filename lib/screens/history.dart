@@ -15,6 +15,7 @@ import 'package:hirome_rental_shop_web/widgets/history_list_tile.dart';
 import 'package:hirome_rental_shop_web/widgets/month_field.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -41,6 +42,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
           style: const TextStyle(color: kBlackColor),
         ),
         actions: [
+          HeaderButton(
+            label: 'さらに過去のデータを確認する',
+            labelColor: kWhiteColor,
+            backgroundColor: kGreyColor,
+            onPressed: () async {
+              String shopNumber = authProvider.shop?.number ?? '';
+              final url = Uri.parse(
+                'https://hirome.co.jp/rental/history/?number=$shopNumber',
+              );
+              if (!await launchUrl(url)) {
+                throw Exception('Could not launch $url');
+              }
+            },
+          ),
           HeaderButton(
             label: 'CSVダウンロード',
             labelColor: kWhiteColor,
