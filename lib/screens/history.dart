@@ -43,13 +43,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
         ),
         actions: [
           HeaderButton(
-            label: 'さらに過去のデータを確認する',
+            label: '過去のデータを確認',
             labelColor: kWhiteColor,
             backgroundColor: kGreyColor,
             onPressed: () async {
-              String shopNumber = authProvider.shop?.number ?? '';
+              String number = authProvider.shop?.number ?? '';
               final url = Uri.parse(
-                'https://hirome.co.jp/rental/history/?number=$shopNumber',
+                'https://hirome.co.jp/rental/history/access.php?number=$number',
               );
               if (!await launchUrl(url)) {
                 throw Exception('Could not launch $url');
