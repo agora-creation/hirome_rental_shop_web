@@ -8,7 +8,7 @@ import 'package:hirome_rental_shop_web/services/product.dart';
 import 'package:hirome_rental_shop_web/widgets/product_checkbox_list_tile.dart';
 
 class FavoritesScreen extends StatefulWidget {
-  final AuthProvider authProvider;
+  final Auth2Provider authProvider;
 
   const FavoritesScreen({
     required this.authProvider,

@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = Provider.of<Auth2Provider>(context);
 
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
       stream: shopLoginService.streamList(authProvider.authUser?.uid),
@@ -260,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class ProductDetailsDialog extends StatefulWidget {
-  final AuthProvider authProvider;
+  final Auth2Provider authProvider;
   final ProductModel product;
 
   const ProductDetailsDialog({

@@ -36,6 +36,7 @@ class OrderProvider with ChangeNotifier {
   Future<String?> create({
     ShopModel? shop,
     List<CartModel>? carts,
+    String createdUserName = '',
   }) async {
     String? error;
     if (shop == null) return '注文に失敗しました';
@@ -58,6 +59,7 @@ class OrderProvider with ChangeNotifier {
         'shopInvoiceName': shop.invoiceName,
         'carts': newCarts,
         'status': 0,
+        'createdUserName': createdUserName,
         'updatedAt': DateTime.now(),
         'createdAt': DateTime.now(),
       });
@@ -90,6 +92,7 @@ class OrderProvider with ChangeNotifier {
         'shopInvoiceName': order.shopInvoiceName,
         'carts': newCarts,
         'status': 0,
+        'createdUserName': order.createdUserName,
         'updatedAt': DateTime.now(),
         'createdAt': DateTime.now(),
       });

@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: AuthProvider.initialize()),
+        ChangeNotifierProvider.value(value: Auth2Provider.initialize()),
         ChangeNotifierProvider.value(value: OrderProvider()),
       ],
       child: MaterialApp(
@@ -65,7 +65,7 @@ class SplashController extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = Provider.of<Auth2Provider>(context);
     switch (authProvider.status) {
       case AuthStatus.uninitialized:
         return const SplashScreen();

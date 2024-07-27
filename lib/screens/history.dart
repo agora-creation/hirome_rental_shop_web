@@ -29,7 +29,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = Provider.of<Auth2Provider>(context);
     final orderProvider = Provider.of<OrderProvider>(context);
 
     return Scaffold(
@@ -236,6 +236,13 @@ class _OrderDetailsDialogState extends State<OrderDetailsDialog> {
           children: [
             Text(
               '注文日時 : ${dateText('yyyy/MM/dd HH:mm', widget.order.createdAt)}',
+              style: const TextStyle(
+                color: kGreyColor,
+                fontSize: 16,
+              ),
+            ),
+            Text(
+              '注文者名 : ${widget.order.createdUserName}',
               style: const TextStyle(
                 color: kGreyColor,
                 fontSize: 16,

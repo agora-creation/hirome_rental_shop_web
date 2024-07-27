@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hirome_rental_shop_web/models/shop_login.dart';
 
 class ShopLoginService {
   String collection = 'shopLogin';
@@ -10,6 +11,18 @@ class ShopLoginService {
 
   void delete(Map<String, dynamic> values) {
     firestore.collection(collection).doc(values['id']).delete();
+  }
+
+  Future<ShopLoginModel?> select({String? id}) async {
+    ShopLoginModel? ret;
+    await firestore
+        .collection(collection)
+        .doc(id ?? 'error')
+        .get()
+        .then((value) {
+      ret = ShopLoginModel.fromSnapshot(value);
+    });
+    return ret;
   }
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> streamList(String? id) {

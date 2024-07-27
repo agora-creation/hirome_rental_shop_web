@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hirome_rental_shop_web/common/functions.dart';
 import 'package:hirome_rental_shop_web/common/style.dart';
 import 'package:hirome_rental_shop_web/models/cart.dart';
+import 'package:hirome_rental_shop_web/models/shop_login.dart';
 import 'package:hirome_rental_shop_web/providers/auth.dart';
 import 'package:hirome_rental_shop_web/providers/order.dart';
+import 'package:hirome_rental_shop_web/services/shop_login.dart';
 import 'package:hirome_rental_shop_web/widgets/cart_list.dart';
 import 'package:hirome_rental_shop_web/widgets/custom_lg_button.dart';
 import 'package:hirome_rental_shop_web/widgets/link_text.dart';
@@ -17,11 +19,12 @@ class OrderCartScreen extends StatefulWidget {
 }
 
 class _OrderCartScreenState extends State<OrderCartScreen> {
+  ShopLoginService shopLoginService = ShopLoginService();
   bool buttonDisabled = false;
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = Provider.of<Auth2Provider>(context);
     final orderProvider = Provider.of<OrderProvider>(context);
 
     return Scaffold(
@@ -83,9 +86,17 @@ class _OrderCartScreenState extends State<OrderCartScreen> {
                       setState(() {
                         buttonDisabled = true;
                       });
+                      String createdUserName = '';
+                      ShopLoginModel? shopLogin = await shopLoginService.select(
+                        id: authProvider.authUser?.uid,
+                      );
+                      if (shopLogin != null) {
+                        createdUserName = shopLogin.requestName;
+                      }
                       String? error = await orderProvider.create(
                         shop: authProvider.shop,
                         carts: authProvider.carts,
+                        createdUserName: createdUserName,
                       );
                       if (error != null) {
                         if (!mounted) return;

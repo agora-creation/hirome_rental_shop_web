@@ -41,7 +41,7 @@ class _OrderProductTotalScreenState extends State<OrderProductTotalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
+    final authProvider = Provider.of<Auth2Provider>(context);
     final orderProvider = Provider.of<OrderProvider>(context);
 
     return Scaffold(

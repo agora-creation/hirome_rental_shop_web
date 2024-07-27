@@ -16,7 +16,7 @@ enum AuthStatus {
   unauthenticated,
 }
 
-class AuthProvider with ChangeNotifier {
+class Auth2Provider with ChangeNotifier {
   AuthStatus _status = AuthStatus.uninitialized;
   AuthStatus get status => _status;
   FirebaseAuth? auth;
@@ -38,7 +38,7 @@ class AuthProvider with ChangeNotifier {
     requestName.clear();
   }
 
-  AuthProvider.initialize() : auth = FirebaseAuth.instance {
+  Auth2Provider.initialize() : auth = FirebaseAuth.instance {
     auth?.authStateChanges().listen(_onStateChanged);
   }
 
