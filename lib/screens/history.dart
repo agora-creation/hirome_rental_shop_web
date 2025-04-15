@@ -274,18 +274,13 @@ class _OrderDetailsDialogState extends State<OrderDetailsDialog> {
                     label: 'キャンセルする',
                     labelColor: kWhiteColor,
                     backgroundColor: kOrangeColor,
-                    onPressed: () async {
-                      String? error =
-                          await widget.orderProvider.cancel(widget.order);
-                      if (error != null) {
-                        if (!mounted) return;
-                        showMessage(context, error, false);
-                        return;
-                      }
-                      if (!mounted) return;
-                      showMessage(context, 'キャンセルに成功しました', true);
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => showDialog(
+                      context: context,
+                      builder: (context) => CancelDialog(
+                        orderProvider: widget.orderProvider,
+                        order: widget.order,
+                      ),
+                    ),
                   )
                 : Container(),
             widget.order.status == 1
@@ -309,6 +304,54 @@ class _OrderDetailsDialogState extends State<OrderDetailsDialog> {
                 : Container(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CancelDialog extends StatefulWidget {
+  final OrderProvider orderProvider;
+  final OrderModel order;
+
+  const CancelDialog({
+    required this.orderProvider,
+    required this.order,
+    super.key,
+  });
+
+  @override
+  State<CancelDialog> createState() => _CancelDialogState();
+}
+
+class _CancelDialogState extends State<CancelDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      contentPadding: const EdgeInsets.all(16),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text('本当にキャンセルしますか？'),
+          const SizedBox(height: 16),
+          CustomSmButton(
+            label: 'キャンセルする',
+            labelColor: kWhiteColor,
+            backgroundColor: kRedColor,
+            onPressed: () async {
+              String? error = await widget.orderProvider.cancel(widget.order);
+              if (error != null) {
+                if (!mounted) return;
+                showMessage(context, error, false);
+                return;
+              }
+              if (!mounted) return;
+              showMessage(context, 'キャンセルに成功しました', true);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
     );
   }
